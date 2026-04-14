@@ -79,22 +79,22 @@ set(CUDA_KERNELS
 
 # Test 1: Logger test (C++ only, no CUDA)
 # Only needs Logger and Timer, not the full framework
-add_executable(test_logger 
-    test_logger.cpp 
+add_executable(test_logger
+    tests/unit-tests/test_logger.cpp
     src/core/Timer.cpp
     src/core/Logger.cpp
 )
 target_include_directories(test_logger PRIVATE ${CMAKE_SOURCE_DIR})
 
 # Test 2: Simple CUDA test
-add_executable(test_cuda_simple test_cuda_simple.cu)
+add_executable(test_cuda_simple tests/unit-tests/test_cuda_simple.cu)
 set_target_properties(test_cuda_simple PROPERTIES 
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_ARCHITECTURES 86
 )
 
 # Test 3: Full CUDA backend test
-add_executable(test_cuda_backend test_cuda_backend.cu ${CUDA_SOURCES} ${CORE_SOURCES})
+add_executable(test_cuda_backend tests/unit-tests/test_cuda_backend.cu ${CUDA_SOURCES} ${CORE_SOURCES})
 set_target_properties(test_cuda_backend PROPERTIES 
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_ARCHITECTURES 86
@@ -102,8 +102,8 @@ set_target_properties(test_cuda_backend PROPERTIES
 target_include_directories(test_cuda_backend PRIVATE ${CMAKE_SOURCE_DIR})
 
 # Test 4: Matrix multiplication kernel test
-add_executable(test_matmul 
-    test_matmul.cu 
+add_executable(test_matmul
+    tests/unit-tests/test_matmul.cu 
     src/backends/cuda/kernels/matrix_mul.cu
     ${CORE_SOURCES}
     ${CUDA_SOURCES}
@@ -116,7 +116,7 @@ target_include_directories(test_matmul PRIVATE ${CMAKE_SOURCE_DIR})
 
 # Test 5: Convolution kernel test
 add_executable(test_convolution
-    test_convolution.cu
+    tests/unit-tests/test_convolution.cu
     src/backends/cuda/kernels/convolution.cu
     ${CORE_SOURCES}
     ${CUDA_SOURCES}
@@ -129,7 +129,7 @@ target_include_directories(test_convolution PRIVATE ${CMAKE_SOURCE_DIR})
 
 # Test 6: Reduction kernel test
 add_executable(test_reduction
-    test_reduction.cu
+    tests/unit-tests/test_reduction.cu
     src/backends/cuda/kernels/reduction.cu
     ${CORE_SOURCES}
     ${CUDA_SOURCES}
@@ -153,8 +153,8 @@ message(STATUS "")
 if(OpenCL_FOUND)
     # Create as CUDA project to link CUDA runtime properly
     add_executable(test_opencl_backend
-        test_opencl_backend.cpp
-        test_opencl_stub.cu
+        tests/unit-tests/test_opencl_backend.cpp
+        tests/unit-tests/test_opencl_stub.cu
         ${OPENCL_SOURCES}
         ${CORE_SOURCES}
         ${CUDA_SOURCES}
@@ -175,8 +175,8 @@ endif()
 # Test 8: DirectCompute backend test (Windows only)
 if(WIN32)
     add_executable(test_directcompute_backend
-        test_directcompute_backend.cpp
-        test_opencl_stub.cu
+        tests/unit-tests/test_directcompute_backend.cpp
+        tests/unit-tests/test_opencl_stub.cu
         ${DIRECTCOMPUTE_SOURCES}
         ${CORE_SOURCES}
         ${CUDA_SOURCES}
@@ -241,7 +241,7 @@ if(IMGUI_FOUND AND WIN32)
     add_executable(GPU-Benchmark-GUI WIN32
         src/gui/main_gui_fixed.cpp
         src/gui/app.rc
-        test_opencl_stub.cu
+        tests/unit-tests/test_opencl_stub.cu
         ${IMGUI_SOURCES}
         ${CORE_SOURCES}
         ${CUDA_SOURCES}
